@@ -20,11 +20,14 @@ class ListBook extends React.Component {
                     <li key={book.id}>
                         <div className="book">
                             <div className="book-top">
-                                <div className="book-cover" style={{
-                                    width: 128,
-                                    height: 193,
-                                    backgroundImage: `url(${book.imageLinks.smallThumbnail})`
-                                }}></div>
+                                {book.imageLinks!= null && book.imageLinks.smallThumbnail !== "" &&(
+                                    <div className="book-cover" style={{
+                                        width: 128,
+                                        height: 193,
+                                        backgroundImage: `url(${book.imageLinks.smallThumbnail})`
+                                    }}></div>
+                                )}
+
                                 <div className="book-shelf-changer">
                                     <select onChange={(e) => this.props.updateBookShelf(book, e.target.value)}
                                             value={shelfType}>
