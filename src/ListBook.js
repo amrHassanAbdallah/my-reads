@@ -6,6 +6,7 @@ class ListBook extends React.Component {
         books: PropTypes.array.isRequired,
         shelfType: PropTypes.string,
         updateBookShelf: PropTypes.func,
+        searchBooks: PropTypes.func,
         shelfs:PropTypes.array.isRequired,
         shelfsMapping:PropTypes.object.isRequired,
     }
@@ -40,9 +41,11 @@ class ListBook extends React.Component {
                                 </div>
                             </div>
                             <div className="book-title">{book.title}</div>
-                            <div className="book-authors">{
-                                book.authors.join(",")
-                            }</div>
+                            {book.authors!= null  &&(
+                                <div className="book-authors">{
+                                    book.authors.join(", ")
+                                }</div>
+                            )}
                         </div>
                     </li>
                 ))}
