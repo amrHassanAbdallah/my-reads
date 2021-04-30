@@ -2,7 +2,13 @@ import React from 'react'
 import PropTypes from 'prop-types'
 
 class ListBook extends React.Component {
-
+    static propTypes = {
+        books: PropTypes.array.isRequired,
+        shelfType: PropTypes.string,
+        updateBookShelf: PropTypes.func,
+        shelfs:PropTypes.array.isRequired,
+        shelfsMapping:PropTypes.object.isRequired,
+    }
 
     render() {
         let shelfsMapping = this.props.shelfsMapping
@@ -10,7 +16,7 @@ class ListBook extends React.Component {
         const shelfType = this.props.shelfType
         return (
             <ol className="books-grid">
-                {this.props.books.filter(book => book.shelf === shelfType).map((book) => (
+                {this.props.books.filter(book => book.shelf === shelfType||shelfType == null).map((book) => (
                     <li key={book.id}>
                         <div className="book">
                             <div className="book-top">
@@ -40,14 +46,6 @@ class ListBook extends React.Component {
             </ol>
         )
     }
-}
-
-ListBook.propTypes = {
-    books: PropTypes.array.isRequired,
-    shelfType: PropTypes.string,
-    updateBookShelf: PropTypes.func.isRequired,
-    shelfs:PropTypes.array.isRequired,
-    shelfsMapping:PropTypes.object.isRequired,
 }
 
 export default ListBook

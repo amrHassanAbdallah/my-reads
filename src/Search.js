@@ -1,8 +1,31 @@
 import React from 'react'
 import {Link} from "react-router-dom";
+import ListBook from "./ListBook";
 
 class Search extends React.Component {
+    state = {
+        query:''
+    }
+    updateQuery = (query)=>{
+        this.setState(()=>({
+            query:query.trim()
+        }))
+    }
     render() {
+        const {query} = this.state
+        const {books} = this.props
+        const showingBooks = query === ""?[]:books.filter((b)=>{
+            console.log(b.title.toLowerCase().includes(query.toLowerCase())|| b.authors[0].toLowerCase().includes(query.toLowerCase()))
+            return b.title.toLowerCase().includes(query.toLowerCase())|| b.authors[0].toLowerCase().includes(query.toLowerCase())
+        });
+        console.info(showingBooks)
+        const shelfs = ["currentlyReading", "wantToRead", "read", "none"]
+        const shelfsMapping = {
+            "currentlyReading": "Currently Reading",
+            "wantToRead": "Want to Read",
+            "read": "Read",
+            "none": "None"
+        }
         return (
             <div className="search-books">
                 <div className="search-books-bar">
@@ -19,12 +42,12 @@ class Search extends React.Component {
                   However, remember that the BooksAPI.search method DOES search by title or author. So, don't worry if
                   you don't find a specific author or title. Every search is limited by search terms.
                 */}
-                        <input type="text" placeholder="Search by title or author"/>
+                        <input type="text" placeholder="Search by title or author" value={this.state.query} onChange={(e)=> this.updateQuery(e.target.value)}/>
 
                     </div>
                 </div>
                 <div className="search-books-results">
-                    <ol className="books-grid"></ol>
+                    <ListBook books={showingBooks}  shelfs={shelfs} shelfsMapping={shelfsMapping}/>
                 </div>
             </div>
         )
