@@ -15,9 +15,9 @@ class Search extends React.Component {
         }))
         this.props.searchBooks(query).then((res) => {
             console.log(res)
-            if (res.error){
+            if (res.err){
                 this.setState(()=>({
-                    err:res.error,
+                    err:"No data",
                     books:[]
                 }))
             }else{

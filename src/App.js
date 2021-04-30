@@ -39,6 +39,9 @@ class BooksApp extends React.Component {
     }
     search = (query) => {
         return BooksAPI.search(query).then((res) => {
+            if (res.error ){
+                return {err :res.error}
+            }
             if (res.length > 0) {
                 let mapOfBooks = {}
                 for (let i = 0; i < this.state.books.length; i++) {
