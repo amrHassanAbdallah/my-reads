@@ -1,7 +1,6 @@
-import React, {Component} from 'react'
+import React from 'react'
 import ListBooks from "./ListBook";
 import {Link} from "react-router-dom";
-import ListBook from "./ListBook";
 class Home extends React.Component {
 
     render() {
@@ -10,7 +9,7 @@ class Home extends React.Component {
             "currentlyReading": "Currently Reading",
             "wantToRead": "Want to Read",
             "read": "Read",
-            "None": "none"
+            "none": "None"
         }
         return (
             <div className="list-books">
@@ -19,11 +18,11 @@ class Home extends React.Component {
                 </div>
                 <div className="list-books-content">
                     <div>
-                        {shelfs.filter(shelf => shelf != "none").map((shelf) => (
-                            <div className="bookshelf">
+                        {shelfs.filter(shelf => shelf !== "none").map((shelf) => (
+                            <div key={shelf} className="bookshelf">
                                 <h2 className="bookshelf-title">{shelfsMapping[shelf]}</h2>
                                 <div className="bookshelf-books">
-                                    <ListBooks shelfType={shelf}  shelfs={shelfs} shelfsMapping={shelfsMapping}/>
+                                    <ListBooks books={this.props.books} updateBookShelf={this.props.updateBookShelf} shelfType={shelf}  shelfs={shelfs} shelfsMapping={shelfsMapping}/>
                                 </div>
                             </div>
 
