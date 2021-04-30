@@ -2,15 +2,12 @@ import React from 'react'
 import ListBooks from "./ListBook";
 import {Link} from "react-router-dom";
 class Home extends React.Component {
-
+    componentWillMount(){
+        this.props.getBooks()
+    }
     render() {
-        const shelfs = ["currentlyReading", "wantToRead", "read", "none"]
-        const shelfsMapping = {
-            "currentlyReading": "Currently Reading",
-            "wantToRead": "Want to Read",
-            "read": "Read",
-            "none": "None"
-        }
+        const shelfs = this.props.shelfs
+        const shelfsMapping = this.props.shelfsMapping
         return (
             <div className="list-books">
                 <div className="list-books-title">

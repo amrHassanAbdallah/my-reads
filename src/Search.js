@@ -13,7 +13,6 @@ class Search extends React.Component {
             query: query,
             err:""
         }))
-        console.log(query,"inside the update query")
         this.props.searchBooks(query).then((res) => {
             console.log(res)
             if (res.error){
@@ -40,13 +39,8 @@ class Search extends React.Component {
         if (query === "") {
             books = []
         }
-        const shelfs = ["currentlyReading", "wantToRead", "read", "none"]
-        const shelfsMapping = {
-            "currentlyReading": "Currently Reading",
-            "wantToRead": "Want to Read",
-            "read": "Read",
-            "none": "None"
-        }
+        const shelfs = this.props.shelfs
+        const shelfsMapping = this.props.shelfsMapping
 
         return (
             <div className="search-books">

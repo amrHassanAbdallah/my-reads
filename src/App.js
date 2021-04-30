@@ -18,10 +18,10 @@ class BooksApp extends React.Component {
     }
     updateBookShelf = (book, newShelf, updateStateBool) => {
         BooksAPI.update(book, newShelf).then(() => {
-            if (updateStateBool !== false) {
+            console.log("checking status update",updateStateBool)
+            if (updateStateBool !== false){
                 this.setState((currentState) => ({
                         books: currentState.books.map((b) => {
-                            console.log(newShelf, currentState);
                             if (book.id === b.id) {
                                 b.shelf = newShelf
                             }
@@ -30,7 +30,6 @@ class BooksApp extends React.Component {
 
                     }
                 ))
-
             }
         }).catch((err) => {
             console.log(err)
@@ -56,23 +55,31 @@ class BooksApp extends React.Component {
             }
         })
     }
-
-    componentDidMount() {
+    getBooks = ()=>{
         BooksAPI.getAll().then(books => this.setState({books})).catch(err => {
             console.log(err)
             this.setState({err})
         })
     }
 
+
+
     render() {
+        const shelfs = ["currentlyReading", "wantToRead", "read", "none"]
+        const shelfsMapping = {
+            "currentlyReading": "Currently Reading",
+            "wantToRead": "Want to Read",
+            "read": "Read",
+            "none": "None"
+        }
         return (
             <Router>
                 <div className="app">
 
                     <Route exact path='/' component={() => <Home books={this.state.books}
-                                                                 updateBookShelf={this.updateBookShelf}/>}></Route>
+                                                                 updateBookShelf={this.updateBookShelf} getBooks={this.getBooks} shelfs={shelfs} shelfsMapping={shelfsMapping}/>}></Route>
                     <Route exact path='/search' component={() => <Search searchBooks={this.search}
-                                                                         updateBookShelf={this.updateBookShelf}/>}></Route>
+                                                                         updateBookShelf={this.updateBookShelf} shelfs={shelfs} shelfsMapping={shelfsMapping} />}></Route>
                 </div>
 
             </Router>
