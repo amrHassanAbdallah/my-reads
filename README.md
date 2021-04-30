@@ -1,6 +1,6 @@
 # MyReads Project
 
-This project is based on `Reactjs` to manage books reading, by enabling the user to move books between shelves as
+This project is built using `Reactjs` to manage books reading, by enabling the user to move books between shelves as
  well as searching books
 
 ## TL;DR
