@@ -31,11 +31,11 @@ class ListBook extends React.Component {
 
                                 <div className="book-shelf-changer">
                                     <select onChange={(e) => this.props.updateBookShelf(book, e.target.value)}
-                                            value={shelfType}>
+                                            value={book.shelf}>
                                         <option value="move" disabled>Move to...</option>
-                                        {shelfs.filter((shelf) => shelf !== "none").map((shelf) => (
+                                        {shelfs.map((shelf) => (
                                             <option key={shelf} value={shelf}
-                                                    disabled={shelf == shelfType}>{shelfsMapping[shelf]}</option>
+                                                    disabled={ shelf === book.shelf}>{shelfsMapping[shelf]}</option>
                                         ))}
                                     </select>
                                 </div>
