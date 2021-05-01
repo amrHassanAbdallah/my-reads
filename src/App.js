@@ -53,7 +53,7 @@ class BooksApp extends React.Component {
             if (res.error) {
                 console.log("inside the error handler")
                 this.setState({err: "no data found!",query:query,searchedBooks:[]})
-                return
+                return res
             }
             if (res.length > 0) {
                 console.log("here",res.length)
@@ -73,6 +73,7 @@ class BooksApp extends React.Component {
                     query,
                     err:"",
                 })
+                return res
             }
         })
     }

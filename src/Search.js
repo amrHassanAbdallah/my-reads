@@ -3,7 +3,7 @@ import {Link} from "react-router-dom";
 import ListBook from "./ListBook";
 
 
-const DEBOUNCE_TIME = 500
+const DEBOUNCE_TIME = 900
 
 class Search extends React.Component {
     state = {
