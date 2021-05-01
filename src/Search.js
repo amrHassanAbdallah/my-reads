@@ -7,20 +7,21 @@ const DEBOUNCE_TIME = 900
 
 class Search extends React.Component {
     state = {
-        query: "",
+        query: {value:"",last_modified_date:null},
     }
     debounceTimer = null;
 
     onChangeHandler = (event) => {
+        let query = {value:event.target.value,last_modified_date:new Date()}
         this.setState({
-            query: event.target.value
+            query: query
         })
         // Clear the last registered timer for the function
         clearTimeout(this.debounceTimer);
         // Set a new timer
         this.debounceTimer = setTimeout(
             // Bind the callback function to pass the current input value as arg
-            this.search.bind(null, event.target.value),
+            this.search.bind(null, query),
             DEBOUNCE_TIME
         )
     }
@@ -34,9 +35,14 @@ class Search extends React.Component {
     }
 
     render() {
-        let query =  this.state.query
+        let query =  ""
         let books = this.props.searchResult;
-
+        console.log(this.props.query,this.state.query)
+        if (this.props.query.last_modified_date == null || this.state.query.last_modified_date != null && this.state.query.last_modified_date > this.props.query.last_modified_date ){
+            query = this.state.query.value
+        }else{
+            query = this.props.query.value
+        }
         const shelfs = this.props.shelfs
         const shelfsMapping = this.props.shelfsMapping
 

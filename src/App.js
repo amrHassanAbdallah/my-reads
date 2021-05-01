@@ -16,7 +16,7 @@ class BooksApp extends React.Component {
     state = {
         books: [],
         searchedBooks: [],
-        query: '',
+        query: {value:"",last_modified_date:null},
         err:""
     }
     updateBookShelf = (book, newShelf, updateStateBool) => {
@@ -44,16 +44,17 @@ class BooksApp extends React.Component {
 
     }
     search = (query) => {
-        this.setState({query:query})
-        if (query === ""){
-            this.setState({err:"",query: query,searchedBooks:[]})
+        let timeNow = new Date()
+        this.setState({query:{value:query.value,last_modified_date:timeNow}})
+        if (query.value === ""){
+            this.setState({err:"",searchedBooks:[]})
             return
         }
-        return BooksAPI.search(query).then((res) => {
+        return BooksAPI.search(query.value).then((res) => {
             console.log("got response", res)
             if (res === undefined || res.error) {
                 console.log("inside the error handler")
-                this.setState({err: "no data found!",query:query,searchedBooks:[]})
+                this.setState({err: "no data found!",searchedBooks:[]})
                 return res
             }
             if (res.length > 0) {
