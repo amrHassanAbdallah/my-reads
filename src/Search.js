@@ -12,11 +12,11 @@ class Search extends React.Component {
     debounceTimer = null;
 
     onChangeHandler = (event) => {
-        // Clear the last registered timer for the function
-        clearTimeout(this.debounceTimer);
         this.setState({
             query: event.target.value
         })
+        // Clear the last registered timer for the function
+        clearTimeout(this.debounceTimer);
         // Set a new timer
         this.debounceTimer = setTimeout(
             // Bind the callback function to pass the current input value as arg
@@ -25,6 +25,7 @@ class Search extends React.Component {
         )
     }
     search = (query) => {
+        console.log(query,"got the query")
         this.props.searchBooks(query)
 
     }
@@ -33,8 +34,9 @@ class Search extends React.Component {
     }
 
     render() {
-        let query = this.state.query ? this.state.query : this.props.query
+        let query =  this.state.query
         let books = this.props.searchResult;
+
         const shelfs = this.props.shelfs
         const shelfsMapping = this.props.shelfsMapping
 

@@ -44,13 +44,14 @@ class BooksApp extends React.Component {
 
     }
     search = (query) => {
+        this.setState({query:query})
         if (query === ""){
-            this.setState({err:"",query:query,searchedBooks:[]})
+            this.setState({err:"",query: query,searchedBooks:[]})
             return
         }
         return BooksAPI.search(query).then((res) => {
             console.log("got response", res)
-            if (res.error) {
+            if (res === undefined || res.error) {
                 console.log("inside the error handler")
                 this.setState({err: "no data found!",query:query,searchedBooks:[]})
                 return res
@@ -70,7 +71,6 @@ class BooksApp extends React.Component {
                         }
                         return b
                     }),
-                    query,
                     err:"",
                 })
                 return res
