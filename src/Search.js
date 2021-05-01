@@ -7,8 +7,7 @@ const DEBOUNCE_TIME = 500
 
 class Search extends React.Component {
     state = {
-        err:"",
-        query:"",
+        query: "",
     }
     debounceTimer = null;
 
@@ -16,7 +15,7 @@ class Search extends React.Component {
         // Clear the last registered timer for the function
         clearTimeout(this.debounceTimer);
         this.setState({
-            query:event.target.value
+            query: event.target.value
         })
         // Set a new timer
         this.debounceTimer = setTimeout(
@@ -26,24 +25,16 @@ class Search extends React.Component {
         )
     }
     search = (query) => {
+        this.props.searchBooks(query)
 
-        this.props.searchBooks(query).then((res) => {
-            if (res.err){
-                this.setState(()=>({
-                    err:"No data",
-                }))
-            }
-        }).catch((err) => {
-            console.log(err)
-        })
     }
-    updateFromSearchListing = (book,shelf)=>{
-        this.props.updateBookShelf(book,shelf,false)
+    updateFromSearchListing = (book, shelf) => {
+        this.props.updateBookShelf(book, shelf, false)
     }
 
     render() {
-        let query = this.state.query?this.state.query: this.props.query
-        let books = this.props.searchResult && this.state.err===""?this.props.searchResult:[];
+        let query = this.state.query ? this.state.query : this.props.query
+        let books = this.props.searchResult;
         const shelfs = this.props.shelfs
         const shelfsMapping = this.props.shelfsMapping
 
@@ -61,8 +52,8 @@ class Search extends React.Component {
                     </div>
                 </div>
                 <div className="search-books-results">
-                    {this.state.err!==""&&(
-                        <span>{this.state.err}</span>
+                    {this.props.err !== "" && (
+                        <span>{this.props.err}</span>
                     )}
                     <ListBook books={books} shelfs={shelfs} shelfsMapping={shelfsMapping}
                               searchBooks={this.props.searchBooks} updateBookShelf={this.updateFromSearchListing}/>

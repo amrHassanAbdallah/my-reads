@@ -16,11 +16,11 @@ class BooksApp extends React.Component {
     state = {
         books: [],
         searchedBooks: [],
-        query: ''
+        query: '',
+        err:""
     }
     updateBookShelf = (book, newShelf, updateStateBool) => {
         BooksAPI.update(book, newShelf).then(() => {
-            let isFound = false
             let updatedHomeBooks = this.state.books.filter(b => b.id !== book.id)
             book.shelf = newShelf
             updatedHomeBooks.push(book)
@@ -44,11 +44,19 @@ class BooksApp extends React.Component {
 
     }
     search = (query) => {
+        if (query === ""){
+            this.setState({err:"",query:query,searchedBooks:[]})
+            return
+        }
         return BooksAPI.search(query).then((res) => {
+            console.log("got response", res)
             if (res.error) {
-                return {err: res.error}
+                console.log("inside the error handler")
+                this.setState({err: "no data found!",query:query,searchedBooks:[]})
+                return
             }
             if (res.length > 0) {
+                console.log("here",res.length)
                 let mapOfBooks = {}
                 for (let i = 0; i < this.state.books.length; i++) {
                     mapOfBooks[this.state.books[i].id] = this.state.books[i].shelf
@@ -62,7 +70,8 @@ class BooksApp extends React.Component {
                         }
                         return b
                     }),
-                    query
+                    query,
+                    err:"",
                 })
             }
         })
@@ -99,7 +108,9 @@ class BooksApp extends React.Component {
                                        updateBookShelf={this.updateBookShelf}
                                        shelfs={shelfs} shelfsMapping={shelfsMapping}
                                        searchResult={this.state.searchedBooks}
-                                       query={this.state.query}/>}>
+                                       query={this.state.query}
+                                       err={this.state.err}
+                               />}>
                     </Route>
                 </div>
 
