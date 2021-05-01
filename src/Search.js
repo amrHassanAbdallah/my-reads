@@ -37,7 +37,6 @@ class Search extends React.Component {
     render() {
         let query =  ""
         let books = this.props.searchResult;
-        console.log(this.props.query,this.state.query)
         if (this.props.query.last_modified_date == null || this.state.query.last_modified_date != null && this.state.query.last_modified_date > this.props.query.last_modified_date ){
             query = this.state.query.value
         }else{
