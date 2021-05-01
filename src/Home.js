@@ -2,9 +2,7 @@ import React from 'react'
 import ListBooks from "./ListBook";
 import {Link} from "react-router-dom";
 class Home extends React.Component {
-    componentWillMount(){
-        this.props.getBooks()
-    }
+
     render() {
         const shelfs = this.props.shelfs
         const shelfsMapping = this.props.shelfsMapping

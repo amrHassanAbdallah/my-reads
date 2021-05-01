@@ -2,43 +2,48 @@ import React from 'react'
 import {Link} from "react-router-dom";
 import ListBook from "./ListBook";
 
+
+const DEBOUNCE_TIME = 500
+
 class Search extends React.Component {
     state = {
-        query: '',
-        books: [],
         err:"",
+        query:"",
     }
-    updateQuery = (query) => {
-        this.setState(() => ({
-            query: query,
-            err:""
-        }))
+    debounceTimer = null;
+
+    onChangeHandler = (event) => {
+        // Clear the last registered timer for the function
+        clearTimeout(this.debounceTimer);
+        this.setState({
+            query:event.target.value
+        })
+        // Set a new timer
+        this.debounceTimer = setTimeout(
+            // Bind the callback function to pass the current input value as arg
+            this.search.bind(null, event.target.value),
+            DEBOUNCE_TIME
+        )
+    }
+    search = (query) => {
+
         this.props.searchBooks(query).then((res) => {
-            console.log(res)
             if (res.err){
                 this.setState(()=>({
                     err:"No data",
-                    books:[]
                 }))
-            }else{
-                this.setState({books:res})
             }
         }).catch((err) => {
             console.log(err)
         })
     }
     updateFromSearchListing = (book,shelf)=>{
-        let books = this.state.books
         this.props.updateBookShelf(book,shelf,false)
-        this.setState({books: books.filter(b=>book.id !== b.id)})
     }
 
     render() {
-        const {query} = this.state
-        let books = this.state.books
-        if (query === "") {
-            books = []
-        }
+        let query = this.state.query?this.state.query: this.props.query
+        let books = this.props.searchResult && this.state.err===""?this.props.searchResult:[];
         const shelfs = this.props.shelfs
         const shelfsMapping = this.props.shelfsMapping
 
@@ -50,8 +55,8 @@ class Search extends React.Component {
                         </button>
                     </Link>
                     <div className="search-books-input-wrapper">
-                        <input type="text" placeholder="Search by title or author" value={this.state.query}
-                               onChange={(e) => this.updateQuery(e.target.value)}/>
+                        <input type="text" placeholder="Search by title or author" value={query}
+                               onChange={this.onChangeHandler}/>
 
                     </div>
                 </div>

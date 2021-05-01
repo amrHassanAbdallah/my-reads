@@ -14,23 +14,23 @@ import * as BooksAPI from "./BooksAPI";
 
 class BooksApp extends React.Component {
     state = {
-        books: []
+        books: [],
+        searchedBooks: [],
+        query: ''
     }
     updateBookShelf = (book, newShelf, updateStateBool) => {
         BooksAPI.update(book, newShelf).then(() => {
-            console.log("checking status update",updateStateBool)
-            if (updateStateBool !== false){
-                this.setState((currentState) => ({
-                        books: currentState.books.map((b) => {
-                            if (book.id === b.id) {
-                                b.shelf = newShelf
-                            }
-                            return b
-                        })
+            let isFound = false
+            let updatedHomeBooks = this.state.books.filter(b=>b.id!==book.id)
+            book.shelf= newShelf
+            updatedHomeBooks.push(book)
+            this.setState((currentState) => ({
+                    books:updatedHomeBooks,
+                    searchedBooks: currentState.searchedBooks.filter(b=>b.id!==book.id),
 
-                    }
-                ))
-            }
+                }
+            ))
+
         }).catch((err) => {
             console.log(err)
             this.setState({err})
@@ -47,18 +47,21 @@ class BooksApp extends React.Component {
                 for (let i = 0; i < this.state.books.length; i++) {
                     mapOfBooks[this.state.books[i].id] = this.state.books[i].shelf
                 }
-                return res.map((b) => {
-                    if (mapOfBooks[b.id]){
-                        b.shelf = mapOfBooks[b.id]
-                    }else{
-                        b.shelf = "none"
-                    }
-                    return b
+                this.setState({
+                    searchedBooks: res.map((b) => {
+                        if (mapOfBooks[b.id]) {
+                            b.shelf = mapOfBooks[b.id]
+                        } else {
+                            b.shelf = "none"
+                        }
+                        return b
+                    }),
+                    query
                 })
             }
         })
     }
-    getBooks = ()=>{
+    componentDidMount() {
         BooksAPI.getAll().then(books => this.setState({books})).catch(err => {
             console.log(err)
             this.setState({err})
@@ -80,9 +83,9 @@ class BooksApp extends React.Component {
                 <div className="app">
 
                     <Route exact path='/' component={() => <Home books={this.state.books}
-                                                                 updateBookShelf={this.updateBookShelf} getBooks={this.getBooks} shelfs={shelfs} shelfsMapping={shelfsMapping}/>}></Route>
+                                                                 updateBookShelf={this.updateBookShelf} shelfs={shelfs} shelfsMapping={shelfsMapping}/>}></Route>
                     <Route exact path='/search' component={() => <Search searchBooks={this.search}
-                                                                         updateBookShelf={this.updateBookShelf} shelfs={shelfs} shelfsMapping={shelfsMapping} />}></Route>
+                                                                         updateBookShelf={this.updateBookShelf} shelfs={shelfs} shelfsMapping={shelfsMapping} searchResult={this.state.searchedBooks}  query={this.state.query} />}></Route>
                 </div>
 
             </Router>
