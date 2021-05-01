@@ -21,12 +21,18 @@ class BooksApp extends React.Component {
     updateBookShelf = (book, newShelf, updateStateBool) => {
         BooksAPI.update(book, newShelf).then(() => {
             let isFound = false
-            let updatedHomeBooks = this.state.books.filter(b=>b.id!==book.id)
-            book.shelf= newShelf
+            let updatedHomeBooks = this.state.books.filter(b => b.id !== book.id)
+            book.shelf = newShelf
             updatedHomeBooks.push(book)
             this.setState((currentState) => ({
-                    books:updatedHomeBooks,
-                    searchedBooks: currentState.searchedBooks.filter(b=>b.id!==book.id),
+                    books: updatedHomeBooks,
+                    searchedBooks: currentState.searchedBooks.map((b) => {
+                        if (b.id === book.id){
+                            b.shelf = newShelf
+                        }
+                        return b
+
+                    }),
 
                 }
             ))
@@ -39,8 +45,8 @@ class BooksApp extends React.Component {
     }
     search = (query) => {
         return BooksAPI.search(query).then((res) => {
-            if (res.error ){
-                return {err :res.error}
+            if (res.error) {
+                return {err: res.error}
             }
             if (res.length > 0) {
                 let mapOfBooks = {}
@@ -61,13 +67,13 @@ class BooksApp extends React.Component {
             }
         })
     }
+
     componentDidMount() {
         BooksAPI.getAll().then(books => this.setState({books})).catch(err => {
             console.log(err)
             this.setState({err})
         })
     }
-
 
 
     render() {
@@ -81,11 +87,20 @@ class BooksApp extends React.Component {
         return (
             <Router>
                 <div className="app">
-
-                    <Route exact path='/' component={() => <Home books={this.state.books}
-                                                                 updateBookShelf={this.updateBookShelf} shelfs={shelfs} shelfsMapping={shelfsMapping}/>}></Route>
-                    <Route exact path='/search' component={() => <Search searchBooks={this.search}
-                                                                         updateBookShelf={this.updateBookShelf} shelfs={shelfs} shelfsMapping={shelfsMapping} searchResult={this.state.searchedBooks}  query={this.state.query} />}></Route>
+                    <Route exact path='/'
+                           render={() =>
+                               <Home books={this.state.books}
+                                     updateBookShelf={this.updateBookShelf} shelfs={shelfs}
+                                     shelfsMapping={shelfsMapping}/>}>
+                    </Route>
+                    <Route exact path='/search'
+                           render={() =>
+                               <Search searchBooks={this.search}
+                                       updateBookShelf={this.updateBookShelf}
+                                       shelfs={shelfs} shelfsMapping={shelfsMapping}
+                                       searchResult={this.state.searchedBooks}
+                                       query={this.state.query}/>}>
+                    </Route>
                 </div>
 
             </Router>
